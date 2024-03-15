@@ -1,11 +1,15 @@
 import requests
-class attack_data:
+from urllib.parse import quote
+class attackData:
     def __init__(self):
         self.base_url = ""
         self.cookies = { "JSESSIONID": "" }
-        self.headers = {}
+        self.headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        self.DB_type = "oracle"
 
-        self.data = {'keyword': 'hi'}
+        self.data = {
+            'searchType':'all',
+            'keyword': 'test'}
         self.query = ""
         self.flag_word = "moon"
         
@@ -30,6 +34,9 @@ class attack_data:
     
     def set_flag_word(self,word):
         self.flag_word = word
+    
+    def set_DB_type(self,type):
+        self.DB_type = type
 
     def send_get_request(self,url):
         #요청 보내기
@@ -38,29 +45,36 @@ class attack_data:
             print("세션 ID 교체") 
             return False
         elif self.flag_word in res.text:
+            print("질의 결과 - false")
+            #print(res.text)
+            return False
+        else:
             print("true")
             #print(res.text)
             return True
-        else:
-            print("false")
-            #print(res.text)
-            return False
         
-    def send_post_request(self):
+    def send_post_request(self,request_string=""):
         #요청 보내기
-        res = requests.post(self.base_url, cookies=self.cookies, data=self.data)
-        print(res.text)
+
+        if(request_string != ""):
+            self.set_query(request_string)
+
+        res = requests.post(self.base_url, cookies=self.cookies, data=self.data, headers=self.headers)
+        #print(res.text)
         if '권한' in res.text:
             print("세션 ID 교체") 
             return False
         elif self.flag_word in res.text:
-            print("true")
+            print("True")
             #print(res.text)
             return True
         else:
-            print("false")
+            print("False")
             #print(res.text)
             return False
+        
+
+
 
 
     
