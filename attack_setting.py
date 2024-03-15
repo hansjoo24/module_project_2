@@ -11,7 +11,10 @@ class attackData:
             'searchType':'all',
             'keyword': 'test'}
         self.query = ""
-        self.flag_word = "moon"
+        self.flag_word = "nywtest"
+
+        self.table_names=['ANSWER']
+        self.column_names=[]
         
 
     def show(self):
