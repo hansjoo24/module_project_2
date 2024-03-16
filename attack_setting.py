@@ -13,8 +13,6 @@ class attackData:
         self.query = ""
         self.flag_word = "nywtest"
 
-        self.table_names=['ANSWER']
-        self.column_names=[]
         
 
     def show(self):
@@ -76,6 +74,47 @@ class attackData:
             #print(res.text)
             return False
         
+class tableInfo:
+    def __init__(self):
+        self.table_count = 0
+        self.tables=[]
+
+        self.column_counts={}
+        self.columns={}
+
+        self.data_counts={}
+        self.datas={}
+
+    def append_table(self,table):
+        self.tables.append(table)
+        self.columns[table]=[]
+
+    def append_column(self,table_name,column_name):
+        self.columns[table_name].append(column_name)
+        self.datas[column_name]=[]
+        
+
+    def append_datas(self,column_name,data):
+        self.datas[column_name].append(data)
+    
+    def get_counts(self,type):
+        if type=='table':
+            return self.table_count
+        
+        elif type=='column':
+            return self.column_counts
+        
+        elif type=='data':
+            return self.data_counts
+
+    def show(self):
+        print(f"테이블 수 : {self.get_counts('table')}")
+        print(f"테이블 : {self.tables}")
+        print(f"컬럼 수 : {self.get_counts('column')}")
+        print(f"컬럼 : {self.columns}")
+        print(f"컬럼 별 데이터 수 : {self.get_counts('data')}")
+        print(f"컬럼 : {self.datas}")
+
 
 
 

