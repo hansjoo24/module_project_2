@@ -1,5 +1,5 @@
 import requests
-from urllib.parse import quote
+
 class attackData:
     def __init__(self):
         self.base_url = ""
@@ -46,11 +46,11 @@ class attackData:
             print("세션 ID 교체") 
             return False
         elif self.flag_word in res.text:
-            print("질의 결과 - false")
+            #print("질의 결과 - false")
             #print(res.text)
             return False
         else:
-            print("true")
+            #print("true")
             #print(res.text)
             return True
         
@@ -61,41 +61,38 @@ class attackData:
             self.set_query(request_string)
 
         res = requests.post(self.base_url, cookies=self.cookies, data=self.data, headers=self.headers)
+        
         #print(res.text)
         if '권한' in res.text:
             print("세션 ID 교체") 
             return False
         elif self.flag_word in res.text:
-            print("True")
+            #print("True")
             #print(res.text)
             return True
         else:
-            print("False")
+            #print("False")
             #print(res.text)
             return False
         
 class tableInfo:
     def __init__(self):
-        self.table_count = 0
         self.tables=[]
-
-        self.column_counts={}
         self.columns={}
-
-        self.data_counts={}
         self.datas={}
 
     def append_table(self,table):
         self.tables.append(table)
         self.columns[table]=[]
+        self.datas[table]={}
 
     def append_column(self,table_name,column_name):
         self.columns[table_name].append(column_name)
-        self.datas[column_name]=[]
+        self.datas[table_name][column_name]=[]
         
 
-    def append_datas(self,column_name,data):
-        self.datas[column_name].append(data)
+    def append_datas(self,table_name,column_name,data):
+        self.datas[table_name][column_name].append(data)
     
     def get_counts(self,type):
         if type=='table':
@@ -106,14 +103,40 @@ class tableInfo:
         
         elif type=='data':
             return self.data_counts
+    def show_tables(self):
+        print(f'table = {self.tables}')
+    
+    def show_columns(self):
+        # Find maximum length for each column
+        max_table_len = 15
+        data = self.columns
 
-    def show(self):
-        print(f"테이블 수 : {self.get_counts('table')}")
-        print(f"테이블 : {self.tables}")
-        print(f"컬럼 수 : {self.get_counts('column')}")
-        print(f"컬럼 : {self.columns}")
-        print(f"컬럼 별 데이터 수 : {self.get_counts('data')}")
-        print(f"컬럼 : {self.datas}")
+        # Print data
+        for table, columns in data.items():
+            print(f"{table:<{max_table_len}} | " + " | ".join(columns))
+
+
+    def show_data(self,table_name):
+        
+        data = self.datas[table_name]
+
+        keys = list(data.keys())
+        num_rows = len(data[keys[0]])
+
+        print(f'table = {table_name}')
+        # Print header
+        max_lens = 15
+        header = ' | '.join(f'{key:<{max_lens}}' for i, key in enumerate(keys))
+        print(header)
+        print('-' * (max_lens *6))
+
+        # Print data
+        for i in range(num_rows):
+            row = ' | '.join(f'{data[key][i]:<{max_lens}}' for j, key in enumerate(keys))
+            print(row)
+
+            
+
 
 
 
