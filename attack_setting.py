@@ -1,4 +1,6 @@
 import requests
+import pandas as pd
+
 
 class attackData:
     def __init__(self):
@@ -16,7 +18,7 @@ class attackData:
         
 
     def show(self):
-        print(f"base URL = {self.base_url}")
+        print(f"\nbase URL = {self.base_url}")
         print(f"SessionID = {self.cookies['JSESSIONID']}")
         print(f"설정된 공격 쿼리 : {self.data['keyword']}")
         print(f"true 판별 기준 = {self.flag_word}")
@@ -46,12 +48,8 @@ class attackData:
             print("세션 ID 교체") 
             return False
         elif self.flag_word in res.text:
-            #print("질의 결과 - false")
-            #print(res.text)
             return False
         else:
-            #print("true")
-            #print(res.text)
             return True
         
     def send_post_request(self,request_string=""):
@@ -64,15 +62,11 @@ class attackData:
         
         #print(res.text)
         if '권한' in res.text:
-            print("세션 ID 교체") 
+            print("\n세션 ID 교체") 
             return False
         elif self.flag_word in res.text:
-            #print("True")
-            #print(res.text)
             return True
         else:
-            #print("False")
-            #print(res.text)
             return False
         
 class tableInfo:
@@ -104,12 +98,13 @@ class tableInfo:
         elif type=='data':
             return self.data_counts
     def show_tables(self):
-        print(f'table = {self.tables}')
+        print(f'\ntable = {self.tables}')
     
     def show_columns(self):
         # Find maximum length for each column
         max_table_len = 15
         data = self.columns
+        print()
 
         # Print data
         for table, columns in data.items():
@@ -123,6 +118,7 @@ class tableInfo:
         keys = list(data.keys())
         num_rows = len(data[keys[0]])
 
+        print()
         print(f'table = {table_name}')
         # Print header
         max_lens = 15
@@ -134,6 +130,17 @@ class tableInfo:
         for i in range(num_rows):
             row = ' | '.join(f'{data[key][i]:<{max_lens}}' for j, key in enumerate(keys))
             print(row)
+
+    def export_data_xlsx(self):
+        dfs = []
+        for table, columns in self.columns.items():
+            df = pd.DataFrame(self.datas[table], columns=columns)
+            dfs.append(df)
+
+        # Excel 파일로 내보내기
+        with pd.ExcelWriter('output.xlsx') as writer:
+            for i, table in enumerate(self.tables):
+                dfs[i].to_excel(writer, sheet_name=table, index=False)
 
             
 
