@@ -56,19 +56,93 @@ state=""
 while(state != 'q'):
 
     print("\n기능 목록")
-    print('-'*20)
+    print('='*20)
     print("1. 사이트 URL 설정")
     print("2. 사이트 SessionID 설정")
-    print("3. 특정 쿼리 보내기")
-    print("4. 테이블 탐색")
-    print("5. 컬럼 탐색")
-    print("6. 테이블 내 데이터 탐색")
-    print("7. 테이블 정보 출력")
-    print("8. 컬럼 정보 출력")
-    print("9. 데이터 정보 출력")
+    print("3. 공격대상 설정 보기")
+
     print('-'*20)
+    print("4. 쿼리 요청")
+    print("5. 테이블 탐색")
+    print("6. 컬럼 탐색")
+    print("7. 테이블 내 데이터 탐색")
+
+    print('-'*20)
+    print("8. 테이블 정보 출력")
+    print("9. 컬럼 정보 출력")
+    print("10. 데이터 정보 출력")
+    print('='*20)
 
     user_input = input("원하는 명령의 숫자를 입력 : ")
-    state= input("계속 실행을 원하시면 엔터를 눌러주세요... (exit=q)")
+
+    match user_input:
+        case '1': #사이트 URL 설정 
+            print(f"현재 URL : {page.base_url}") 
+            if input("새로운 url로 변경하시겠습니까? [y/n] : ")=='y':
+                page.set_url(input("새로운 url 입력 : ")) 
+                
+                
+        case '2': #SESSIONID 설정
+            print(f"현재 SESSIONID : {page.cookies['JSESSIONID']}") 
+            if input("SessionID를 새로 설정하시겠습니까? [y/n] : ")=='y':
+                page.set_url(input("새로운 url 입력 : ")) 
+                
+                
+        case '3': #공격 대상 설정 보기
+            print("현재 공격 대상 설정") 
+            page.show()
+
+        case '4':
+            user_query = input("공격 대상 사이트에 실행할 쿼리를 입력 : ")
+            print(f"처리 결과 : {page.send_post_request(user_query)}")
+
+        case '5':
+            page.show()
+            if input("현재 설정으로 테이블 탐색 시작[y/n]")=='y':
+                tables = get_table_infos(page)
+        
+        case '6':
+            page.show()
+            result.show_tables()
+            user_table = input("컬럼을 탐색할 테이블명 입력(모든 컬럼 탐색 -> All 입력) : ")
+            if user_table=='All':
+                print("모든 테이블의 컬럼을 탐색")
+                for table in result.tables:
+                    get_column_infos(page,result,table)
+            elif user_table in result.tables:
+                get_column_infos(page,result,user_table)
+            else:
+                print("테이블 목록에 있는 테이블을 입력해주세요. ")
+        
+        case '7':
+            page.show()
+            result.show_columns()
+            user_table = input("테이터 탐색을 할 테이블명 입력(모든 데이터 탐색 -> All 입력) : ")
+            if user_table=='All':
+                print("모든 테이블의 데이터를 탐색")
+                for table in result.tables:
+                    get_table_data(page,result,table)
+            elif len(result.columns[user_table])!=0:
+                get_table_data(page,result,user_table)
+            else:
+                print("해당 테이블의 컬럼 탐색을 먼저 진행해주세요. ")
+        
+        case '8':
+            result.show_tables()
+        case '9':
+            result.show_columns()
+        case '10':
+            result.show_tables()
+            user_table = input("데이터 출력을 원하는 테이블을 지정해주세요. ")
+            result.show_data(user_table)
+
+        case _: 
+            print("존재하지 않는 명령어")
+        
+
+
+    state= input("\n계속 실행을 원하시면 엔터를 눌러주세요... (exit=q)")
+
+    
 
 print("프로그램 종료")
