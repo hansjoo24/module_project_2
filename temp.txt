@@ -17,3 +17,14 @@ data = self.datas[table_name]
         for key in keys:
             for i in range(len(data[key])):
                 print(f"| {key:<{max_len}} | {data[key][i]:<20} |")
+
+
+
+    # Find maximum length for each column
+        max_table_len = 15
+        data = self.columns
+        print()
+
+        # Print data
+        for table, columns in data.items():
+            print(f"{table:<{max_table_len}} | " + " | ".join(columns))
