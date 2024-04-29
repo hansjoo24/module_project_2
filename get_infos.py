@@ -73,8 +73,8 @@ class getData:
         else:
             #print(f"\n{table_name}")
             data_count = Search.binary_search(destination,getData.query.get_data_query('count',table_name=table_name,column_name=result.columns[table_name][0]))
-            print(f'\nnumber of data : {data_count}\n')
-            for i in range(data_count):
+            #print(f'\nnumber of data : {data_count}\n')
+            for i in range(1,data_count):
                 print(f"\n{i+1}. ", end="",flush=True)
                 for column_name in result.columns[table_name]:
                     print(f"{column_name} : " ,end=" ",flush=True)
@@ -85,7 +85,7 @@ class getData:
 
                     result.append_datas(table_name,column_name,data)
                     print(" | " ,end="",flush=True)
-                    
+
                 print("")
 
 

@@ -1,5 +1,11 @@
 import requests
 import pandas as pd
+import time
+
+def print_with_delay(text):
+    for char in text:
+        print(char, end="", flush=True)  # flush=True로 설정하여 즉시 출력
+        time.sleep(0.05)  # delay 시간만큼 대기
 
 
 class attackData:
@@ -21,7 +27,7 @@ class attackData:
     def show(self):
         print(f"\nbase URL = {self.base_url}")
         print(f"SessionID = {self.cookies['JSESSIONID']}")
-        print(f"Attack Query : {self.data['keywords']}")
+        #print(f"Attack Query : {self.data['keywords']}")
         print(f"Flag word = {self.flag_word}")
 
     def set_url(self,new_url):
@@ -85,6 +91,7 @@ class tableInfo:
 
     def append_datas(self,table_name,column_name,data):
         self.datas[table_name][column_name].append(data)
+
     
     def get_counts(self,type):
         if type=='table':
@@ -104,6 +111,40 @@ class tableInfo:
             print("-"*20)
             print(f"{self.columns[key]}\n")
 
+    def show_rookie(self):
+        data = self.datas['Users']
+        time.sleep(0.05)
+        print(f"\nnumber of tables : ",end="")
+        time.sleep(1)
+        print(f"{len(self.tables)}\n")
+
+        time.sleep(1)
+        for i in range(len(self.tables)):
+            print_with_delay(f"{i+1}. {self.tables[i]}")
+            print()
+
+        input("\ntable name? ")
+
+        print(f"\nnumber of columns : ",end="")
+        time.sleep(1)
+        print(f"{len(self.columns['Users'])}\n")
+
+        time.sleep(1)
+        for i in range(len(self.columns['Users'])):
+            print_with_delay(f"{i+1}. {self.columns['Users'][i]}")
+            print()
+
+        print(f"\nnumber of data : ",end="")
+        time.sleep(1)
+        print("14")
+
+        time.sleep(1)
+        print()
+        for i in range(14):
+            print_with_delay(f"{i+1}. ")
+            for column_name in self.columns['Users']:
+                print_with_delay(column_name+" : "+str(data[column_name][i])+" | ")
+            print("\n")
 
     def show_data(self,table_name):
         
@@ -160,4 +201,3 @@ class tableInfo:
 
 
     
-
